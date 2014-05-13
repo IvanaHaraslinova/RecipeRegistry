@@ -27,6 +27,7 @@ public class Receptar extends javax.swing.JPanel {
     private final RecipeManagerImpl recipeManager;
     private final IngredienceManagerImpl ingredienceManager;
     private Recipe recipe;
+    private long recipeEditId;
    
     /**
      * Creates new form Receptar
@@ -347,6 +348,11 @@ public class Receptar extends javax.swing.JPanel {
 
         jEditTitle.setHorizontalAlignment(javax.swing.JTextField.LEFT);
         jEditTitle.setText("Torta");
+        jEditTitle.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jEditTitleActionPerformed(evt);
+            }
+        });
 
         jLabel17.setText("Time:");
 
@@ -927,7 +933,6 @@ public class Receptar extends javax.swing.JPanel {
 
     /**
      * Updates recipe on OK button click (edit jForm)
-     * TODO
      * @param evt 
      */
     private void jOkEditButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jOkEditButtonActionPerformed
@@ -935,10 +940,29 @@ public class Receptar extends javax.swing.JPanel {
         String title = jRecipesList.getSelectedValue().toString();
         try {
             recipe = recipeManager.findRecipeByTitle(title);
+            
+            recipe.setTitle(jEditTitle.getText());
+            RecipeCategory cat = null;
+            try {
+                cat = recipeCategoryManager.findRecipeCategoryByTitle(jEditCategory.getSelectedItem().toString());
+            } catch (RecipeCategoryException ex) {
+                Logger.getLogger(Receptar.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            recipe.setCategory(cat);
+            recipe.setNote(jEditNote.getText());
+            recipe.setInstructions(jEditInstructions.getText());
+            recipe.setTime(Integer.valueOf(jEditTime.getValue().toString()));
+            
             recipeManager.updateRecipe(recipe);
         } catch (RecipeException ex) {
             Logger.getLogger(Receptar.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
+        jRecipeName.setText(recipe.getTitle());
+        jRecipeNote.setText("Note: " + recipe.getNote());
+        jRecipeTime.setText(recipe.getTime() + " min");
+        jRecipeInstructions.setText(recipe.getInstructions());
+        
         this.setRecipeNameList();
         EditRecipejFrame.dispose();
     }//GEN-LAST:event_jOkEditButtonActionPerformed
@@ -953,19 +977,22 @@ public class Receptar extends javax.swing.JPanel {
 
     /**
      * Updates category on update button click
-     * TODO
      * @param evt 
      */
     private void jCategoriesUpdateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCategoriesUpdateButtonActionPerformed
-       /** String title = this.categoryNameInput.getText();
+        int row = this.jCategoryNameTable.getSelectedRow();
+        int column = this.jCategoryNameTable.getSelectedColumn();
+        String title = jCategoryNameTable.getValueAt(row, column).toString();
         try {
             RecipeCategory category = recipeCategoryManager.findRecipeCategoryByTitle(title);
-            this.recipeCategoryManager.updateRecipeCategory(category);
+            
+            category.setTitle(categoryNameInput.getText());
+            
+            recipeCategoryManager.updateRecipeCategory(category);
         } catch (RecipeCategoryException ex) {
             Logger.getLogger(Receptar.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        this.setCategories();*/
+        }     
+        this.setCategories();
     }//GEN-LAST:event_jCategoriesUpdateButtonActionPerformed
 
     /**
@@ -1008,15 +1035,8 @@ public class Receptar extends javax.swing.JPanel {
         } catch (IngredienceException ex) {
             Logger.getLogger(Receptar.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-       // Object recipeTitle = jRecipesList.getSelectedValue();
-       // try {
-       //     recipe = recipeManager.findRecipeByTitle(recipeTitle.toString());
-       // } catch (RecipeException ex) {
-       //     Logger.getLogger(Receptar.class.getName()).log(Level.SEVERE, null, ex);
-       // }
-        this.setIngrediences(recipe);
 
+        this.setIngrediences(recipe);
     }//GEN-LAST:event_jIngredienceDeleteButtonActionPerformed
 
     /**
@@ -1060,7 +1080,6 @@ public class Receptar extends javax.swing.JPanel {
 
     /**
      * Adds ingredience on button click
-     * TODO
      * @param evt 
      */
     private void jIngredienceAddButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jIngredienceAddButtonActionPerformed
@@ -1073,12 +1092,28 @@ public class Receptar extends javax.swing.JPanel {
         ingredience.setAmount(amount);
         ingredience.setUnit(unit);
         
+        try {
+            ingredienceManager.createIngredience(ingredience);
+        } catch (IngredienceException ex) {
+            Logger.getLogger(Receptar.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        Recipe recipe = null;
+        try {
+            recipe = recipeManager.findRecipeByTitle(jRecipeName.getText());
+        } catch (RecipeException ex) {
+            Logger.getLogger(Receptar.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
         try {
             recipeManager.addIngredienceToRecipe(ingredience, recipe);
         } catch (RecipeException ex) {
             Logger.getLogger(Receptar.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
+        List<Ingredience> ingrediences = recipe.getIngrediences();
+        ingrediences.add(ingredience);
+        recipe.setIngrediences(ingrediences);
 
         this.setIngrediences(recipe);
     }//GEN-LAST:event_jIngredienceAddButtonActionPerformed
@@ -1129,7 +1164,6 @@ public class Receptar extends javax.swing.JPanel {
 
     /**
      * Pops up new jform for editing recipe
-     * TODO
      * @param evt 
      */
     private void jRecipesEditButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRecipesEditButtonActionPerformed
@@ -1143,9 +1177,11 @@ public class Receptar extends javax.swing.JPanel {
             Logger.getLogger(Receptar.class.getName()).log(Level.SEVERE, null, ex);
         }
         
+        recipeEditId = recipe.getId();
+        
         jEditCategory.setSelectedItem(recipe.getCategory().getTitle());
         jEditTitle.setText(recipe.getTitle());
-        jEditNote.setText(recipe.getNote());
+        jEditNote.setText("Note: " + recipe.getNote());
         jEditInstructions.setText(recipe.getInstructions());
         jEditTime.setValue(recipe.getTime());
         
@@ -1170,6 +1206,10 @@ public class Receptar extends javax.swing.JPanel {
     private void jButton14ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton14ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton14ActionPerformed
+
+    private void jEditTitleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jEditTitleActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jEditTitleActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
