@@ -23,4 +23,6 @@ public interface RecipeCategoryManager {
     public List<RecipeCategory> findAllRecipeCategories() throws RecipeCategoryException;
     
     public RecipeCategory findRecipeCategoryById(long id) throws RecipeCategoryException;
+    
+    public RecipeCategory findRecipeCategoryByTitle(String title) throws RecipeCategoryException;
 }

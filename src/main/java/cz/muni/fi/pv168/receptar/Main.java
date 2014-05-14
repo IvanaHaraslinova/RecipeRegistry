@@ -6,8 +6,14 @@
 
 package cz.muni.fi.pv168.receptar;
 
+import cz.muni.fi.pv168.gui.Receptar;
+import java.awt.EventQueue;
 import java.io.IOException;
+import java.util.List;
 import java.util.Properties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JFrame;
 import org.apache.tomcat.dbcp.dbcp.BasicDataSource;
 
 /**
@@ -28,6 +34,19 @@ public class Main {
         myconf.store(System.out, "Property subor vypis:");
         
         System.out.println("");
+        
+        EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                JFrame frame = new JFrame();
+                
+                frame.add(new Receptar(ds));
+                frame.setTitle("Receptar");
+                frame.setSize(1000, 800);
+                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                
+                frame.setVisible(true);
+            }
+        });
         
         
         
@@ -103,27 +122,27 @@ public class Main {
         
         //System.out.println(mng.findRecipeCategoryById(2));
         
-        IngredienceManagerImpl inMng = new IngredienceManagerImpl(ds);
-        RecipeManagerImpl mng = new RecipeManagerImpl(ds);
+//        IngredienceManagerImpl inMng = new IngredienceManagerImpl(ds);
+//        RecipeManagerImpl mng = new RecipeManagerImpl(ds);
 //      
-        Recipe recept = new Recipe();
-        recept.setTitle("skusobny nazov pre kategoriu");
-        recept.setInstructions("skusobne instrukcie");
-        recept.setNote("skusobna poznamka");
-        recept.setTime(120);
+//        Recipe recept = new Recipe();
+//        recept.setTitle("skusobny nazov pre kategoriu");
+//        recept.setInstructions("skusobne instrukcie");
+//        recept.setNote("skusobna poznamka");
+//        recept.setTime(120);
         //recept.setCategory(new RecipeCategory(1,"skusobna kategoria"));
         
                 
-        Ingredience ingred = new Ingredience(0, "skusobna muka", 12.4, "dkg");
+//        Ingredience ingred = new Ingredience(0, "skusobna muka", 12.4, "dkg");
         //inMng.createIngredience(ingred);
-        Ingredience ingred2 = new Ingredience(2, "skusobna muka", 12.4, "dkg");
-        recept.getIngrediences().add(ingred);
-        recept.getIngrediences().add(ingred2);
+//        Ingredience ingred2 = new Ingredience(2, "skusobna muka", 12.4, "dkg");
+//        recept.getIngrediences().add(ingred);
+//        recept.getIngrediences().add(ingred2);
         //mng.addIngredienceToRecipe(ingred, recept);
         
-        mng.createRecipe(recept);
-        System.out.println(recept);
-        System.out.println(mng.findAllRecipes());
+//        mng.createRecipe(recept);
+//        System.out.println(recept);
+//        System.out.println(mng.findAllRecipes());
         
         
 //        mng.removeIngredienceFromRecipe(ingred, recept);

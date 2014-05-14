@@ -10,7 +10,7 @@ package cz.muni.fi.pv168.receptar;
  *
  * @author Majo
  */
-class IngredienceException extends Exception {
+public class IngredienceException extends Exception {
 
     public IngredienceException(String cause) {
         super(cause);

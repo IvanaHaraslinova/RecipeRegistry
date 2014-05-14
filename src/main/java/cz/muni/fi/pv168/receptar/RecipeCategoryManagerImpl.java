@@ -25,9 +25,6 @@ public class RecipeCategoryManagerImpl implements RecipeCategoryManager {
         this.dataSource = dataSource;
     }
 
-    public RecipeCategoryManagerImpl() {
-    }
-
     @Override
     public RecipeCategory createRecipeCategory(RecipeCategory category) throws RecipeCategoryException {
         log.debug("createRecipeCategory()");
@@ -170,5 +167,29 @@ public class RecipeCategoryManagerImpl implements RecipeCategoryManager {
         }
         return null;
     }
+    
+    @Override
+    public RecipeCategory findRecipeCategoryByTitle(String title) throws RecipeCategoryException{
+        log.debug("findRecipeCategoryByTitle()");
+        
+        try (Connection con = dataSource.getConnection()) {
+            try (PreparedStatement st = con.prepareStatement(
+                    "Select id,title FROM recipecategories WHERE title=?")) {
+                st.setString(1, title);
+                try (ResultSet rs = st.executeQuery()) {
+                    if (rs.next()) {
+                        return new RecipeCategory(rs.getLong("id"), rs.getString("title"));
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            log.error("Retrieve of ingredience has failed in method findIngredienceById", e);
+            throw new RecipeCategoryException("Retrieve of ingredience has failed");
+        }
+        return null;
+    }
+    
+    
+  
 
 }

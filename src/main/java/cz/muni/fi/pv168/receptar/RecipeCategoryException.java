@@ -10,7 +10,7 @@ package cz.muni.fi.pv168.receptar;
  *
  * @author Majo
  */
-class RecipeCategoryException extends Exception {
+public class RecipeCategoryException extends Exception {
 
     public RecipeCategoryException(String cause) {
         super(cause);
