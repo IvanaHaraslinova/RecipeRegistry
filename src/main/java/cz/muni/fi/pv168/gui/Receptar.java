@@ -1,19 +1,40 @@
-package cz.muni.fi.pv168.gui;
-
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+package cz.muni.fi.pv168.gui;
+
+import cz.muni.fi.pv168.receptar.RecipeCategory;
+import cz.muni.fi.pv168.receptar.RecipeCategoryManagerImpl;
+import cz.muni.fi.pv168.receptar.RecipeManagerImpl;
+import java.io.IOException;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Properties;
+import javax.sql.DataSource;
+import javax.swing.DefaultListModel;
+import javax.swing.SwingWorker;
+import org.apache.tomcat.dbcp.dbcp.BasicDataSource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
  * @author Majo
  */
-public class Receptar extends javax.swing.JPanel {
+public class Receptar extends javax.swing.JFrame {
 
+    final static Logger log = LoggerFactory.getLogger(RecipeManagerImpl.class);
+
+    DataSource ds;
+    private LoadCategoriesLists loadCategoriesLists;
+    private CreateCategory createCategory;
+    private EditCategory editCategory;
+    private DeleteCategory deleteCategory;
     /**
-     * Creates new form Receptar
+     * Creates new form Receptar2
      */
     public Receptar() {
         initComponents();
@@ -29,16 +50,19 @@ public class Receptar extends javax.swing.JPanel {
     private void initComponents() {
 
         AddNewCategoryjDialog = new javax.swing.JDialog();
-        jTextField1 = new javax.swing.JTextField();
+        jTextFieldCreateCategory = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
-        jButton4 = new javax.swing.JButton();
-        jButton5 = new javax.swing.JButton();
+        jButtonCreateCategory = new javax.swing.JButton();
+        jButtonCancelAddCategory = new javax.swing.JButton();
         EditCategoryjDialog = new javax.swing.JDialog();
-        jTextField2 = new javax.swing.JTextField();
-        jButton12 = new javax.swing.JButton();
+        jTextFieldEditCategory = new javax.swing.JTextField();
+        jButtonCancelEditCategory = new javax.swing.JButton();
         jLabel9 = new javax.swing.JLabel();
-        jButton13 = new javax.swing.JButton();
+        jButtonEditCategoryDB = new javax.swing.JButton();
         DeleteCategoryjDialog = new javax.swing.JDialog();
+        jButtonYesDeleteCategory = new javax.swing.JButton();
+        jButtonNoDeleteCategory = new javax.swing.JButton();
+        jLabel30 = new javax.swing.JLabel();
         AddingRecipejFrame = new javax.swing.JFrame();
         jLabel11 = new javax.swing.JLabel();
         jTextField3 = new javax.swing.JTextField();
@@ -95,20 +119,20 @@ public class Receptar extends javax.swing.JPanel {
         jButton24 = new javax.swing.JButton();
         jLabel27 = new javax.swing.JLabel();
         jButton25 = new javax.swing.JButton();
-        jTabbedPane1 = new javax.swing.JTabbedPane();
         jPanel1 = new javax.swing.JPanel();
-        jButton1 = new javax.swing.JButton();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
+        jTabbedCategoriesPane = new javax.swing.JTabbedPane();
         jPanel2 = new javax.swing.JPanel();
+        jButtonEditCategory = new javax.swing.JButton();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jListCategories = new javax.swing.JList();
+        jButtonDeleteCategory = new javax.swing.JButton();
+        jButtonAddCategory = new javax.swing.JButton();
+        jPanel3 = new javax.swing.JPanel();
         jScrollPane5 = new javax.swing.JScrollPane();
         jScrollPane4 = new javax.swing.JScrollPane();
         jList1 = new javax.swing.JList();
         jScrollPane3 = new javax.swing.JScrollPane();
-        jPanel3 = new javax.swing.JPanel();
+        jPanel4 = new javax.swing.JPanel();
         jScrollPane6 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
         jLabel3 = new javax.swing.JLabel();
@@ -122,7 +146,7 @@ public class Receptar extends javax.swing.JPanel {
         jButton7 = new javax.swing.JButton();
         jButton8 = new javax.swing.JButton();
         jScrollPane8 = new javax.swing.JScrollPane();
-        jList2 = new javax.swing.JList();
+        jListCategoriesSecond = new javax.swing.JList();
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         jButton9 = new javax.swing.JButton();
@@ -131,21 +155,19 @@ public class Receptar extends javax.swing.JPanel {
 
         AddNewCategoryjDialog.setTitle("Add new category");
 
-        jTextField1.setText("jTextField1");
-
         jLabel1.setText("Category name:");
 
-        jButton4.setText("Add");
-        jButton4.addActionListener(new java.awt.event.ActionListener() {
+        jButtonCreateCategory.setText("Add");
+        jButtonCreateCategory.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton4ActionPerformed(evt);
+                jButtonCreateCategoryActionPerformed(evt);
             }
         });
 
-        jButton5.setText("Cancel");
-        jButton5.addActionListener(new java.awt.event.ActionListener() {
+        jButtonCancelAddCategory.setText("Cancel");
+        jButtonCancelAddCategory.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton5ActionPerformed(evt);
+                jButtonCancelAddCategoryActionPerformed(evt);
             }
         });
 
@@ -157,13 +179,13 @@ public class Receptar extends javax.swing.JPanel {
                 .addContainerGap(20, Short.MAX_VALUE)
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 256, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jTextFieldCreateCategory, javax.swing.GroupLayout.PREFERRED_SIZE, 256, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(20, 20, 20))
             .addGroup(AddNewCategoryjDialogLayout.createSequentialGroup()
                 .addGap(133, 133, 133)
-                .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jButtonCreateCategory, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton5)
+                .addComponent(jButtonCancelAddCategory)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         AddNewCategoryjDialogLayout.setVerticalGroup(
@@ -172,31 +194,29 @@ public class Receptar extends javax.swing.JPanel {
                 .addGap(58, 58, 58)
                 .addGroup(AddNewCategoryjDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.DEFAULT_SIZE, 33, Short.MAX_VALUE))
+                    .addComponent(jTextFieldCreateCategory, javax.swing.GroupLayout.DEFAULT_SIZE, 33, Short.MAX_VALUE))
                 .addGap(18, 18, 18)
                 .addGroup(AddNewCategoryjDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton4)
-                    .addComponent(jButton5))
+                    .addComponent(jButtonCreateCategory)
+                    .addComponent(jButtonCancelAddCategory))
                 .addContainerGap(54, Short.MAX_VALUE))
         );
 
         EditCategoryjDialog.setTitle("Edit category");
 
-        jTextField2.setText("jTextField1");
-
-        jButton12.setText("Cancel");
-        jButton12.addActionListener(new java.awt.event.ActionListener() {
+        jButtonCancelEditCategory.setText("Cancel");
+        jButtonCancelEditCategory.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton12ActionPerformed(evt);
+                jButtonCancelEditCategoryActionPerformed(evt);
             }
         });
 
         jLabel9.setText("Category name:");
 
-        jButton13.setText("Edit");
-        jButton13.addActionListener(new java.awt.event.ActionListener() {
+        jButtonEditCategoryDB.setText("Edit");
+        jButtonEditCategoryDB.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton13ActionPerformed(evt);
+                jButtonEditCategoryDBActionPerformed(evt);
             }
         });
 
@@ -208,13 +228,13 @@ public class Receptar extends javax.swing.JPanel {
                 .addContainerGap(20, Short.MAX_VALUE)
                 .addComponent(jLabel9)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 256, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jTextFieldEditCategory, javax.swing.GroupLayout.PREFERRED_SIZE, 256, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(20, 20, 20))
             .addGroup(EditCategoryjDialogLayout.createSequentialGroup()
                 .addGap(133, 133, 133)
-                .addComponent(jButton13, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jButtonEditCategoryDB, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton12)
+                .addComponent(jButtonCancelEditCategory)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         EditCategoryjDialogLayout.setVerticalGroup(
@@ -223,25 +243,60 @@ public class Receptar extends javax.swing.JPanel {
                 .addGap(58, 58, 58)
                 .addGroup(EditCategoryjDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.DEFAULT_SIZE, 33, Short.MAX_VALUE))
+                    .addComponent(jTextFieldEditCategory, javax.swing.GroupLayout.DEFAULT_SIZE, 33, Short.MAX_VALUE))
                 .addGap(18, 18, 18)
                 .addGroup(EditCategoryjDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton13)
-                    .addComponent(jButton12))
+                    .addComponent(jButtonEditCategoryDB)
+                    .addComponent(jButtonCancelEditCategory))
                 .addContainerGap(166, Short.MAX_VALUE))
         );
 
         DeleteCategoryjDialog.setTitle("Delete category");
 
+        jButtonYesDeleteCategory.setText("Yes");
+        jButtonYesDeleteCategory.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonYesDeleteCategoryActionPerformed(evt);
+            }
+        });
+
+        jButtonNoDeleteCategory.setText("No");
+        jButtonNoDeleteCategory.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonNoDeleteCategoryActionPerformed(evt);
+            }
+        });
+
+        jLabel30.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel30.setText("Do you really want to delete this category?");
+        jLabel30.setVerticalAlignment(javax.swing.SwingConstants.TOP);
+
         javax.swing.GroupLayout DeleteCategoryjDialogLayout = new javax.swing.GroupLayout(DeleteCategoryjDialog.getContentPane());
         DeleteCategoryjDialog.getContentPane().setLayout(DeleteCategoryjDialogLayout);
         DeleteCategoryjDialogLayout.setHorizontalGroup(
             DeleteCategoryjDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 406, Short.MAX_VALUE)
+            .addGroup(DeleteCategoryjDialogLayout.createSequentialGroup()
+                .addGroup(DeleteCategoryjDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(DeleteCategoryjDialogLayout.createSequentialGroup()
+                        .addGap(113, 113, 113)
+                        .addComponent(jButtonYesDeleteCategory, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(27, 27, 27)
+                        .addComponent(jButtonNoDeleteCategory, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(DeleteCategoryjDialogLayout.createSequentialGroup()
+                        .addGap(79, 79, 79)
+                        .addComponent(jLabel30)))
+                .addContainerGap(84, Short.MAX_VALUE))
         );
         DeleteCategoryjDialogLayout.setVerticalGroup(
             DeleteCategoryjDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 139, Short.MAX_VALUE)
+            .addGroup(DeleteCategoryjDialogLayout.createSequentialGroup()
+                .addGap(30, 30, 30)
+                .addComponent(jLabel30, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(26, 26, 26)
+                .addGroup(DeleteCategoryjDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButtonYesDeleteCategory)
+                    .addComponent(jButtonNoDeleteCategory))
+                .addContainerGap(25, Short.MAX_VALUE))
         );
 
         AddingRecipejFrame.setTitle("Add a recipe");
@@ -752,80 +807,76 @@ public class Receptar extends javax.swing.JPanel {
                 .addContainerGap(25, Short.MAX_VALUE))
         );
 
-        jButton1.setText("Edit");
-
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null},
-                {null},
-                {null},
-                {null}
-            },
-            new String [] {
-                "CategoryName"
-            }
-        ) {
-            Class[] types = new Class [] {
-                java.lang.String.class
-            };
-            boolean[] canEdit = new boolean [] {
-                false
-            };
-
-            public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
-            }
-
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("RecipeManager");
+        setLocationByPlatform(true);
+        setResizable(false);
+        addComponentListener(new java.awt.event.ComponentAdapter() {
+            public void componentShown(java.awt.event.ComponentEvent evt) {
+                formComponentShown(evt);
             }
         });
-        jTable1.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
-        jTable1.getTableHeader().setReorderingAllowed(false);
-        jScrollPane1.setViewportView(jTable1);
-        if (jTable1.getColumnModel().getColumnCount() > 0) {
-            jTable1.getColumnModel().getColumn(0).setResizable(false);
-        }
 
-        jScrollPane2.setViewportView(jScrollPane1);
-
-        jButton2.setText("Delete");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        jButtonEditCategory.setText("Edit");
+        jButtonEditCategory.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                jButtonEditCategoryActionPerformed(evt);
             }
         });
 
-        jButton3.setText("Add new");
+        jListCategories.addAncestorListener(new javax.swing.event.AncestorListener() {
+            public void ancestorMoved(javax.swing.event.AncestorEvent evt) {
+            }
+            public void ancestorAdded(javax.swing.event.AncestorEvent evt) {
+                jListCategoriesAncestorAdded(evt);
+            }
+            public void ancestorRemoved(javax.swing.event.AncestorEvent evt) {
+            }
+        });
+        jScrollPane2.setViewportView(jListCategories);
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        jButtonDeleteCategory.setText("Delete");
+        jButtonDeleteCategory.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonDeleteCategoryActionPerformed(evt);
+            }
+        });
+
+        jButtonAddCategory.setText("Add new");
+        jButtonAddCategory.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonAddCategoryActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 1060, Short.MAX_VALUE)
-            .addGroup(jPanel1Layout.createSequentialGroup()
+            .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jButton3)
+                .addComponent(jButtonAddCategory)
                 .addGap(18, 18, 18)
-                .addComponent(jButton1)
+                .addComponent(jButtonEditCategory)
                 .addGap(18, 18, 18)
-                .addComponent(jButton2)
+                .addComponent(jButtonDeleteCategory)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 380, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1)
-                    .addComponent(jButton2)
-                    .addComponent(jButton3))
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButtonEditCategory)
+                    .addComponent(jButtonDeleteCategory)
+                    .addComponent(jButtonAddCategory))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jTabbedPane1.addTab("Categories", jPanel1);
+        jTabbedCategoriesPane.addTab("Categories", jPanel2);
 
         jScrollPane5.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 
@@ -880,10 +931,6 @@ public class Receptar extends javax.swing.JPanel {
             }
         });
         jScrollPane7.setViewportView(jTable2);
-        if (jTable2.getColumnModel().getColumnCount() > 0) {
-            jTable2.getColumnModel().getColumn(0).setResizable(false);
-            jTable2.getColumnModel().getColumn(2).setResizable(false);
-        }
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabel2.setText("Torta od mamy");
@@ -908,26 +955,26 @@ public class Receptar extends javax.swing.JPanel {
 
         jButton8.setText("Add");
 
-        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
-        jPanel3.setLayout(jPanel3Layout);
-        jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
+        jPanel4.setLayout(jPanel4Layout);
+        jPanel4Layout.setHorizontalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jScrollPane7, javax.swing.GroupLayout.DEFAULT_SIZE, 822, Short.MAX_VALUE)
             .addComponent(jScrollPane6, javax.swing.GroupLayout.Alignment.TRAILING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
+            .addGroup(jPanel4Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel4Layout.createSequentialGroup()
                         .addComponent(jLabel2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jLabel5)
                         .addGap(113, 113, 113))
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel3)
                             .addComponent(jLabel4)
                             .addComponent(jLabel6)
-                            .addGroup(jPanel3Layout.createSequentialGroup()
+                            .addGroup(jPanel4Layout.createSequentialGroup()
                                 .addComponent(jButton8)
                                 .addGap(18, 18, 18)
                                 .addComponent(jButton6)
@@ -935,11 +982,11 @@ public class Receptar extends javax.swing.JPanel {
                                 .addComponent(jButton7)))
                         .addGap(0, 0, Short.MAX_VALUE))))
         );
-        jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+        jPanel4Layout.setVerticalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel5))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -949,7 +996,7 @@ public class Receptar extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton6)
                     .addComponent(jButton7)
                     .addComponent(jButton8))
@@ -960,16 +1007,16 @@ public class Receptar extends javax.swing.JPanel {
                 .addGap(50, 50, 50))
         );
 
-        jScrollPane3.setViewportView(jPanel3);
+        jScrollPane3.setViewportView(jPanel4);
 
         jScrollPane8.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 
-        jList2.setModel(new javax.swing.AbstractListModel() {
+        jListCategoriesSecond.setModel(new javax.swing.AbstractListModel() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
             public int getSize() { return strings.length; }
             public Object getElementAt(int i) { return strings[i]; }
         });
-        jScrollPane8.setViewportView(jList2);
+        jScrollPane8.setViewportView(jListCategoriesSecond);
 
         jLabel7.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel7.setText("Categories");
@@ -983,18 +1030,18 @@ public class Receptar extends javax.swing.JPanel {
 
         jButton11.setText("Edit");
 
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
                         .addContainerGap()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel7)
                             .addComponent(jLabel8)
-                            .addGroup(jPanel2Layout.createSequentialGroup()
+                            .addGroup(jPanel3Layout.createSequentialGroup()
                                 .addComponent(jButton9)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jButton11)
@@ -1005,9 +1052,9 @@ public class Receptar extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane3))
         );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
                 .addGap(7, 7, 7)
                 .addComponent(jLabel7)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -1017,38 +1064,72 @@ public class Receptar extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane5, javax.swing.GroupLayout.DEFAULT_SIZE, 289, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton9)
                     .addComponent(jButton10)
                     .addComponent(jButton11)))
             .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
         );
 
-        jTabbedPane1.addTab("Recipes", jPanel2);
+        jTabbedCategoriesPane.addTab("Recipes", jPanel3);
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
-        this.setLayout(layout);
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jTabbedCategoriesPane)
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jTabbedCategoriesPane, javax.swing.GroupLayout.Alignment.TRAILING)
+        );
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTabbedPane1)
+            .addGap(0, 1065, Short.MAX_VALUE)
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createSequentialGroup()
+                    .addGap(0, 0, Short.MAX_VALUE)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(0, 0, Short.MAX_VALUE)))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTabbedPane1, javax.swing.GroupLayout.Alignment.TRAILING)
+            .addGap(0, 554, Short.MAX_VALUE)
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createSequentialGroup()
+                    .addGap(0, 0, Short.MAX_VALUE)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(0, 0, Short.MAX_VALUE)))
         );
+
+        pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton2ActionPerformed
+    private DataSource prepareDataSource() throws SQLException, IOException {
+        Properties myconf = new Properties();
 
-    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton4ActionPerformed
+        myconf.load(Receptar.class.getResourceAsStream("/jdbc.properties"));
 
-    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton5ActionPerformed
+        BasicDataSource dataSource = new BasicDataSource();
+        dataSource.setUrl(myconf.getProperty("jdbc.url"));
+        dataSource.setUsername(myconf.getProperty("jdbc.user"));
+        dataSource.setPassword(myconf.getProperty("jdbc.password"));
+
+        return dataSource;
+    }
+
+
+    private void jButtonDeleteCategoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonDeleteCategoryActionPerformed
+        if (jListCategories.getSelectedValue() != null) {
+            DeleteCategoryjDialog.pack();
+            DeleteCategoryjDialog.setResizable(false);
+            DeleteCategoryjDialog.setLocationRelativeTo(this);
+            DeleteCategoryjDialog.setVisible(true);
+        }
+    }//GEN-LAST:event_jButtonDeleteCategoryActionPerformed
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
         // TODO add your handling code here:
@@ -1058,29 +1139,36 @@ public class Receptar extends javax.swing.JPanel {
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton7ActionPerformed
 
-    private void jButton12ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton12ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton12ActionPerformed
+    private void jButtonCreateCategoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCreateCategoryActionPerformed
+        createCategory = new CreateCategory();
+        createCategory.execute();
+        AddNewCategoryjDialog.setVisible(false);
 
-    private void jButton13ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton13ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton13ActionPerformed
+    }//GEN-LAST:event_jButtonCreateCategoryActionPerformed
 
-    private void jButton14ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton14ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton14ActionPerformed
+    private void jButtonCancelAddCategoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCancelAddCategoryActionPerformed
+        AddNewCategoryjDialog.setVisible(false);
+        jTextFieldCreateCategory.setText(null);
+    }//GEN-LAST:event_jButtonCancelAddCategoryActionPerformed
 
-    private void jButton15ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton15ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton15ActionPerformed
+    private void jButtonCancelEditCategoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCancelEditCategoryActionPerformed
+        EditCategoryjDialog.setVisible(false);
+        jTextFieldEditCategory.setText(null);
+    }//GEN-LAST:event_jButtonCancelEditCategoryActionPerformed
 
-    private void jTextField6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField6ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField6ActionPerformed
+    private void jButtonEditCategoryDBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEditCategoryDBActionPerformed
+        EditCategoryjDialog.setVisible(false);
+        editCategory = new EditCategory();
+        editCategory.execute();
+    }//GEN-LAST:event_jButtonEditCategoryDBActionPerformed
 
     private void jTextField3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField3ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextField3ActionPerformed
+
+    private void jTextField6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField6ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextField6ActionPerformed
 
     private void jButton16ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton16ActionPerformed
         // TODO add your handling code here:
@@ -1098,21 +1186,29 @@ public class Receptar extends javax.swing.JPanel {
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton18ActionPerformed
 
-    private void jTextField12ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField12ActionPerformed
+    private void jButton14ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton14ActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField12ActionPerformed
+    }//GEN-LAST:event_jButton14ActionPerformed
 
-    private void jButton20ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton20ActionPerformed
+    private void jButton15ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton15ActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton20ActionPerformed
+    }//GEN-LAST:event_jButton15ActionPerformed
+
+    private void jTextField9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField9ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextField9ActionPerformed
 
     private void jTextField11ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField11ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextField11ActionPerformed
 
-    private void jTextField9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField9ActionPerformed
+    private void jButton20ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton20ActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField9ActionPerformed
+    }//GEN-LAST:event_jButton20ActionPerformed
+
+    private void jTextField12ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField12ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextField12ActionPerformed
 
     private void jTextField10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField10ActionPerformed
         // TODO add your handling code here:
@@ -1138,6 +1234,84 @@ public class Receptar extends javax.swing.JPanel {
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton25ActionPerformed
 
+    private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentShown
+        try {
+            ds = prepareDataSource();
+        } catch (SQLException | IOException ex) {
+            log.error("Problem with dataSource", ex);
+        }
+    }//GEN-LAST:event_formComponentShown
+
+    private void jListCategoriesAncestorAdded(javax.swing.event.AncestorEvent evt) {//GEN-FIRST:event_jListCategoriesAncestorAdded
+        loadCategoriesLists = new LoadCategoriesLists();
+        loadCategoriesLists.execute();
+    }//GEN-LAST:event_jListCategoriesAncestorAdded
+
+    private void jButtonAddCategoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAddCategoryActionPerformed
+        AddNewCategoryjDialog.pack();
+        AddNewCategoryjDialog.setResizable(false);
+        AddNewCategoryjDialog.setLocationRelativeTo(this);
+        AddNewCategoryjDialog.setVisible(true);
+
+    }//GEN-LAST:event_jButtonAddCategoryActionPerformed
+
+    private void jButtonEditCategoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEditCategoryActionPerformed
+        if (jListCategories.getSelectedValue() != null) {
+            EditCategoryjDialog.pack();
+            EditCategoryjDialog.setResizable(false);
+            EditCategoryjDialog.setLocationRelativeTo(this);
+            jTextFieldEditCategory.setText((String)jListCategories.getSelectedValue());
+            EditCategoryjDialog.setVisible(true);
+
+        }
+
+
+    }//GEN-LAST:event_jButtonEditCategoryActionPerformed
+
+    private void jButtonYesDeleteCategoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonYesDeleteCategoryActionPerformed
+        DeleteCategoryjDialog.setVisible(false);
+        deleteCategory = new DeleteCategory();
+        deleteCategory.execute();
+    }//GEN-LAST:event_jButtonYesDeleteCategoryActionPerformed
+
+    private void jButtonNoDeleteCategoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonNoDeleteCategoryActionPerformed
+        DeleteCategoryjDialog.setVisible(false);
+    }//GEN-LAST:event_jButtonNoDeleteCategoryActionPerformed
+
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String args[]) {
+        /* Set the Nimbus look and feel */
+        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         */
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ClassNotFoundException ex) {
+            java.util.logging.Logger.getLogger(Receptar.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(Receptar.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(Receptar.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(Receptar.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        //</editor-fold>
+
+        /* Create and display the form */
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new Receptar().setVisible(true);
+            }
+        });
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JFrame AddIngrediencejDialog;
@@ -1149,31 +1323,33 @@ public class Receptar extends javax.swing.JPanel {
     private javax.swing.JDialog EditCategoryjDialog;
     private javax.swing.JFrame EditIngrediencejDialog1;
     private javax.swing.JFrame EditingRecipejFrame;
-    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton10;
     private javax.swing.JButton jButton11;
-    private javax.swing.JButton jButton12;
-    private javax.swing.JButton jButton13;
     private javax.swing.JButton jButton14;
     private javax.swing.JButton jButton15;
     private javax.swing.JButton jButton16;
     private javax.swing.JButton jButton17;
     private javax.swing.JButton jButton18;
     private javax.swing.JButton jButton19;
-    private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton20;
     private javax.swing.JButton jButton21;
     private javax.swing.JButton jButton22;
     private javax.swing.JButton jButton23;
     private javax.swing.JButton jButton24;
     private javax.swing.JButton jButton25;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton6;
     private javax.swing.JButton jButton7;
     private javax.swing.JButton jButton8;
     private javax.swing.JButton jButton9;
+    private javax.swing.JButton jButtonAddCategory;
+    private javax.swing.JButton jButtonCancelAddCategory;
+    private javax.swing.JButton jButtonCancelEditCategory;
+    private javax.swing.JButton jButtonCreateCategory;
+    private javax.swing.JButton jButtonDeleteCategory;
+    private javax.swing.JButton jButtonEditCategory;
+    private javax.swing.JButton jButtonEditCategoryDB;
+    private javax.swing.JButton jButtonNoDeleteCategory;
+    private javax.swing.JButton jButtonYesDeleteCategory;
     private javax.swing.JComboBox jComboBox1;
     private javax.swing.JComboBox jComboBox2;
     private javax.swing.JLabel jLabel1;
@@ -1199,6 +1375,7 @@ public class Receptar extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel28;
     private javax.swing.JLabel jLabel29;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel30;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
@@ -1206,11 +1383,12 @@ public class Receptar extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JList jList1;
-    private javax.swing.JList jList2;
+    private javax.swing.JList jListCategories;
+    private javax.swing.JList jListCategoriesSecond;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
-    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane10;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
@@ -1222,23 +1400,166 @@ public class Receptar extends javax.swing.JPanel {
     private javax.swing.JScrollPane jScrollPane9;
     private javax.swing.JSpinner jSpinner1;
     private javax.swing.JSpinner jSpinner2;
-    private javax.swing.JTabbedPane jTabbedPane1;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JTabbedPane jTabbedCategoriesPane;
     private javax.swing.JTable jTable2;
     private javax.swing.JTextArea jTextArea1;
     private javax.swing.JTextArea jTextArea2;
     private javax.swing.JTextArea jTextArea3;
-    private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField10;
     private javax.swing.JTextField jTextField11;
     private javax.swing.JTextField jTextField12;
     private javax.swing.JTextField jTextField13;
     private javax.swing.JTextField jTextField14;
-    private javax.swing.JTextField jTextField2;
     private javax.swing.JTextField jTextField3;
     private javax.swing.JTextField jTextField5;
     private javax.swing.JTextField jTextField6;
     private javax.swing.JTextField jTextField8;
     private javax.swing.JTextField jTextField9;
+    private javax.swing.JTextField jTextFieldCreateCategory;
+    private javax.swing.JTextField jTextFieldEditCategory;
     // End of variables declaration//GEN-END:variables
+
+    private class LoadCategoriesLists extends SwingWorker<Void, Void> {
+
+        private DefaultListModel model = new DefaultListModel();
+
+        @Override
+        protected Void doInBackground() throws Exception {
+            RecipeCategoryManagerImpl manager = new RecipeCategoryManagerImpl(ds);
+
+            List<RecipeCategory> categories = manager.findAllRecipeCategories();
+
+            for (RecipeCategory recipeCategory : categories) {
+                model.addElement(recipeCategory.getTitle());
+            }
+            return (Void) null;
+        }
+
+        @Override
+        protected void done() {
+            jListCategories.setModel(model);
+            jListCategoriesSecond.setModel(model);
+
+        }
+
+    }
+
+    private class CreateCategory extends SwingWorker<Void, Void> {
+
+        private DefaultListModel model = new DefaultListModel();
+
+        @Override
+        protected Void doInBackground() throws Exception {
+
+            if (jTextFieldCreateCategory.getText().isEmpty()) {
+                return (Void) null;
+            }
+            String categoryTitle = jTextFieldCreateCategory.getText();
+
+            RecipeCategory newCategory = new RecipeCategory();
+
+            newCategory.setTitle(categoryTitle);
+
+            RecipeCategoryManagerImpl manager = new RecipeCategoryManagerImpl(ds);
+
+            List<RecipeCategory> categories = manager.findAllRecipeCategories();
+
+            List<String> categoryNames = new ArrayList<>();
+
+            for (RecipeCategory category : categories) {
+                categoryNames.add(category.getTitle());
+            }
+
+            if (categoryNames.contains(categoryTitle)) {
+                return (Void) null;
+            }
+
+            manager.createRecipeCategory(newCategory);
+            return (Void) null;
+        }
+
+        @Override
+        protected void done() {
+            jTextFieldCreateCategory.setText(null);
+            loadCategoriesLists = new LoadCategoriesLists();
+            loadCategoriesLists.execute();
+        }
+
+    }
+
+    private class EditCategory extends SwingWorker<Void, Void> {
+
+        private DefaultListModel model = new DefaultListModel();
+
+        @Override
+        protected Void doInBackground() throws Exception {
+
+            if (jTextFieldEditCategory.getText().isEmpty()) {
+                return (Void) null;
+            }
+            String categoryTitle = jTextFieldEditCategory.getText();
+
+            RecipeCategory newCategory = new RecipeCategory();
+
+            newCategory.setTitle(categoryTitle);
+
+            RecipeCategoryManagerImpl manager = new RecipeCategoryManagerImpl(ds);
+
+            List<RecipeCategory> categories = manager.findAllRecipeCategories();
+
+            List<String> categoryNames = new ArrayList<>();
+
+            for (RecipeCategory category : categories) {
+                categoryNames.add(category.getTitle());
+            }
+
+            if (categoryNames.contains(categoryTitle)) {
+                return (Void) null;
+            }
+            
+            for (RecipeCategory category : categories) {
+                if(category.getTitle().equals((String)jListCategories.getSelectedValue())){
+                    category.setTitle(categoryTitle);
+                    manager.updateRecipeCategory(category);
+                }
+            }
+            return (Void) null;
+        }
+
+        @Override
+        protected void done() {
+            jTextFieldCreateCategory.setText(null);
+            loadCategoriesLists = new LoadCategoriesLists();
+            loadCategoriesLists.execute();
+        }
+
+    }
+    
+    private class DeleteCategory extends SwingWorker<Void, Void> {
+
+        private DefaultListModel model = new DefaultListModel();
+
+        @Override
+        protected Void doInBackground() throws Exception {
+
+            RecipeCategoryManagerImpl manager = new RecipeCategoryManagerImpl(ds);
+
+            List<RecipeCategory> categories = manager.findAllRecipeCategories();
+
+            for (RecipeCategory category : categories) {
+                if(category.getTitle().equals((String)jListCategories.getSelectedValue())){
+                    manager.deleteRecipeCategory(category);
+                }
+            }
+            return (Void) null;
+        }
+
+        @Override
+        protected void done() {
+            jTextFieldCreateCategory.setText(null);
+            loadCategoriesLists = new LoadCategoriesLists();
+            loadCategoriesLists.execute();
+        }
+
+    }
 }
