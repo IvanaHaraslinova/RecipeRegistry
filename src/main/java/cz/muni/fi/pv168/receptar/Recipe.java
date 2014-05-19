@@ -137,7 +137,7 @@ public class Recipe {
 
     @Override
     public String toString() {
-        return "Recipe{" + "id=" + id + ", title=" + title + ", instructions=" + instructions + ", note=" + note + ", category=" + category + ", ingrediences=" + ingrediences + ", time=" + time + '}';
+        return title;
     }
     
     
