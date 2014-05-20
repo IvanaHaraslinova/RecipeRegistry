@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Properties;
 import java.util.logging.Level;
 import javax.sql.DataSource;
@@ -173,18 +174,19 @@ public class Receptar extends javax.swing.JFrame {
         jButtonDeleteRecipe = new javax.swing.JButton();
         jButtonEditRecipe = new javax.swing.JButton();
 
-        AddNewCategoryjDialog.setTitle("Add new category");
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("guilabels", Locale.getDefault()); // NOI18N
+        AddNewCategoryjDialog.setTitle(bundle.getString("NewCategoryDialogHeader")); // NOI18N
 
-        jLabel1.setText("Category name:");
+        jLabel1.setText(bundle.getString("CategoryNameLabel")); // NOI18N
 
-        jButtonCreateCategory.setText("Add");
+        jButtonCreateCategory.setText(bundle.getString("AddLabel")); // NOI18N
         jButtonCreateCategory.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonCreateCategoryActionPerformed(evt);
             }
         });
 
-        jButtonCancelAddCategory.setText("Cancel");
+        jButtonCancelAddCategory.setText(bundle.getString("CancelLabel")); // NOI18N
         jButtonCancelAddCategory.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonCancelAddCategoryActionPerformed(evt);
@@ -196,7 +198,7 @@ public class Receptar extends javax.swing.JFrame {
         AddNewCategoryjDialogLayout.setHorizontalGroup(
             AddNewCategoryjDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(AddNewCategoryjDialogLayout.createSequentialGroup()
-                .addContainerGap(20, Short.MAX_VALUE)
+                .addContainerGap(25, Short.MAX_VALUE)
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jTextFieldCreateCategory, javax.swing.GroupLayout.PREFERRED_SIZE, 256, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -222,18 +224,18 @@ public class Receptar extends javax.swing.JFrame {
                 .addContainerGap(54, Short.MAX_VALUE))
         );
 
-        EditCategoryjDialog.setTitle("Edit category");
+        EditCategoryjDialog.setTitle(bundle.getString("EditCategoryDialogHeader")); // NOI18N
 
-        jButtonCancelEditCategory.setText("Cancel");
+        jButtonCancelEditCategory.setText(bundle.getString("CancelLabel")); // NOI18N
         jButtonCancelEditCategory.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonCancelEditCategoryActionPerformed(evt);
             }
         });
 
-        jLabel9.setText("Category name:");
+        jLabel9.setText(bundle.getString("CategoryNameLabel")); // NOI18N
 
-        jButtonEditCategoryDB.setText("Edit");
+        jButtonEditCategoryDB.setText(bundle.getString("EditLabel")); // NOI18N
         jButtonEditCategoryDB.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonEditCategoryDBActionPerformed(evt);
@@ -244,17 +246,16 @@ public class Receptar extends javax.swing.JFrame {
         EditCategoryjDialog.getContentPane().setLayout(EditCategoryjDialogLayout);
         EditCategoryjDialogLayout.setHorizontalGroup(
             EditCategoryjDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(EditCategoryjDialogLayout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, EditCategoryjDialogLayout.createSequentialGroup()
                 .addContainerGap(20, Short.MAX_VALUE)
                 .addComponent(jLabel9)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jTextFieldEditCategory, javax.swing.GroupLayout.PREFERRED_SIZE, 256, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(20, 20, 20))
-            .addGroup(EditCategoryjDialogLayout.createSequentialGroup()
-                .addGap(133, 133, 133)
-                .addComponent(jButtonEditCategoryDB, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButtonCancelEditCategory)
+                .addGroup(EditCategoryjDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(EditCategoryjDialogLayout.createSequentialGroup()
+                        .addComponent(jButtonEditCategoryDB, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jButtonCancelEditCategory))
+                    .addComponent(jTextFieldEditCategory, javax.swing.GroupLayout.PREFERRED_SIZE, 256, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         EditCategoryjDialogLayout.setVerticalGroup(
@@ -271,16 +272,16 @@ public class Receptar extends javax.swing.JFrame {
                 .addContainerGap(166, Short.MAX_VALUE))
         );
 
-        DeleteCategoryjDialog.setTitle("Delete category");
+        DeleteCategoryjDialog.setTitle(bundle.getString("DeleteCategoryDialogHeader")); // NOI18N
 
-        jButtonYesDeleteCategory.setText("Yes");
+        jButtonYesDeleteCategory.setText(bundle.getString("YesLabel")); // NOI18N
         jButtonYesDeleteCategory.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonYesDeleteCategoryActionPerformed(evt);
             }
         });
 
-        jButtonNoDeleteCategory.setText("No");
+        jButtonNoDeleteCategory.setText(bundle.getString("NoLabel")); // NOI18N
         jButtonNoDeleteCategory.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonNoDeleteCategoryActionPerformed(evt);
@@ -288,7 +289,7 @@ public class Receptar extends javax.swing.JFrame {
         });
 
         jLabel30.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel30.setText("Do you really want to delete this category?");
+        jLabel30.setText(bundle.getString("CategoryWarning")); // NOI18N
         jLabel30.setVerticalAlignment(javax.swing.SwingConstants.TOP);
 
         javax.swing.GroupLayout DeleteCategoryjDialogLayout = new javax.swing.GroupLayout(DeleteCategoryjDialog.getContentPane());
@@ -319,10 +320,10 @@ public class Receptar extends javax.swing.JFrame {
                 .addContainerGap(25, Short.MAX_VALUE))
         );
 
-        AddingRecipejFrame.setTitle("Add a recipe");
+        AddingRecipejFrame.setTitle(bundle.getString("AddRecipeFrameHeader")); // NOI18N
 
         jLabel11.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        jLabel11.setText("Recipe title:");
+        jLabel11.setText(bundle.getString("RecipeTitleLabel") + ":"); // NOI18N
 
         jTextFieldRecipeTitle.setHorizontalAlignment(javax.swing.JTextField.LEFT);
         jTextFieldRecipeTitle.addActionListener(new java.awt.event.ActionListener() {
@@ -331,13 +332,15 @@ public class Receptar extends javax.swing.JFrame {
             }
         });
 
-        jLabel12.setText("Time:");
+        jLabel12.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        jLabel12.setText(bundle.getString("RecipeTimeLabel") + ":"); // NOI18N
 
-        jLabel13.setText("Instructions:");
+        jLabel13.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        jLabel13.setText(bundle.getString("RecipeInstructionsLabel") + ":"); // NOI18N
 
         jLabel14.setText("min");
 
-        jLabel15.setText("Note:");
+        jLabel15.setText(bundle.getString("RecipeNoteLabel") + ":"); // NOI18N
 
         jTextFieldRecipeNote.setMinimumSize(new java.awt.Dimension(25, 22));
         jTextFieldRecipeNote.setPreferredSize(new java.awt.Dimension(102, 22));
@@ -362,7 +365,7 @@ public class Receptar extends javax.swing.JFrame {
             }
         });
 
-        jButtonCancelAddRecipe.setText("Cancel");
+        jButtonCancelAddRecipe.setText(bundle.getString("CancelLabel")); // NOI18N
         jButtonCancelAddRecipe.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonCancelAddRecipeActionPerformed(evt);
@@ -370,7 +373,7 @@ public class Receptar extends javax.swing.JFrame {
         });
 
         jLabel28.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        jLabel28.setText("Category:");
+        jLabel28.setText(bundle.getString("CategoryLabel") + ":"); // NOI18N
 
         javax.swing.GroupLayout AddingRecipejFrameLayout = new javax.swing.GroupLayout(AddingRecipejFrame.getContentPane());
         AddingRecipejFrame.getContentPane().setLayout(AddingRecipejFrameLayout);
@@ -380,23 +383,12 @@ public class Receptar extends javax.swing.JFrame {
                 .addGap(46, 46, 46)
                 .addGroup(AddingRecipejFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(AddingRecipejFrameLayout.createSequentialGroup()
-                        .addGroup(AddingRecipejFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel11)
-                            .addComponent(jLabel15)
-                            .addComponent(jLabel28, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(AddingRecipejFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jTextFieldRecipeNote, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jTextFieldRecipeTitle)
-                            .addComponent(jComboBoxCategories, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                    .addGroup(AddingRecipejFrameLayout.createSequentialGroup()
-                        .addGroup(AddingRecipejFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel13)
-                            .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(AddingRecipejFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane9, javax.swing.GroupLayout.DEFAULT_SIZE, 595, Short.MAX_VALUE)
+                            .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel13))
+                        .addGroup(AddingRecipejFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(AddingRecipejFrameLayout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(AddingRecipejFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(AddingRecipejFrameLayout.createSequentialGroup()
                                         .addGap(2, 2, 2)
@@ -407,8 +399,21 @@ public class Receptar extends javax.swing.JFrame {
                                         .addComponent(jSpinnerRecipeTime, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addGap(30, 30, 30)
                                         .addComponent(jLabel14, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addGap(0, 0, Short.MAX_VALUE)))))
-                .addGap(346, 346, 346))
+                                .addGap(0, 644, Short.MAX_VALUE))
+                            .addGroup(AddingRecipejFrameLayout.createSequentialGroup()
+                                .addGap(2, 2, 2)
+                                .addComponent(jScrollPane9))))
+                    .addGroup(AddingRecipejFrameLayout.createSequentialGroup()
+                        .addGroup(AddingRecipejFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel11)
+                            .addComponent(jLabel15)
+                            .addComponent(jLabel28, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(AddingRecipejFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jTextFieldRecipeNote, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jTextFieldRecipeTitle)
+                            .addComponent(jComboBoxCategories, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(346, 346, 346))))
         );
         AddingRecipejFrameLayout.setVerticalGroup(
             AddingRecipejFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -441,10 +446,10 @@ public class Receptar extends javax.swing.JFrame {
                 .addGap(45, 45, 45))
         );
 
-        EditingRecipejFrame.setTitle("Edit a recipe");
+        EditingRecipejFrame.setTitle(bundle.getString("EditRecipeFrameHeader")); // NOI18N
 
         jLabel16.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        jLabel16.setText("Recipe title:");
+        jLabel16.setText(bundle.getString("RecipeTitleLabel") + ":"); // NOI18N
 
         jTextFieldEditRecipeTitle.setHorizontalAlignment(javax.swing.JTextField.LEFT);
         jTextFieldEditRecipeTitle.addActionListener(new java.awt.event.ActionListener() {
@@ -453,13 +458,15 @@ public class Receptar extends javax.swing.JFrame {
             }
         });
 
-        jLabel17.setText("Time:");
+        jLabel17.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        jLabel17.setText(bundle.getString("RecipeTimeLabel") + ":"); // NOI18N
 
-        jLabel18.setText("Instructions:");
+        jLabel18.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        jLabel18.setText(bundle.getString("RecipeInstructionsLabel") + ":"); // NOI18N
 
         jLabel19.setText("min");
 
-        jLabel20.setText("Note:");
+        jLabel20.setText(bundle.getString("RecipeNoteLabel") + ":"); // NOI18N
 
         jTextFieldEditRecipeNote.setMinimumSize(new java.awt.Dimension(25, 22));
         jTextFieldEditRecipeNote.setPreferredSize(new java.awt.Dimension(102, 22));
@@ -485,7 +492,7 @@ public class Receptar extends javax.swing.JFrame {
             }
         });
 
-        jButtonCancelEditRecipe.setText("Cancel");
+        jButtonCancelEditRecipe.setText(bundle.getString("CancelLabel")); // NOI18N
         jButtonCancelEditRecipe.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonCancelEditRecipeActionPerformed(evt);
@@ -493,32 +500,23 @@ public class Receptar extends javax.swing.JFrame {
         });
 
         jLabel29.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        jLabel29.setText("Category:");
+        jLabel29.setText(bundle.getString("CategoryLabel") + ":"); // NOI18N
 
         javax.swing.GroupLayout EditingRecipejFrameLayout = new javax.swing.GroupLayout(EditingRecipejFrame.getContentPane());
         EditingRecipejFrame.getContentPane().setLayout(EditingRecipejFrameLayout);
         EditingRecipejFrameLayout.setHorizontalGroup(
             EditingRecipejFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, EditingRecipejFrameLayout.createSequentialGroup()
+            .addGroup(EditingRecipejFrameLayout.createSequentialGroup()
                 .addGap(46, 46, 46)
                 .addGroup(EditingRecipejFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(EditingRecipejFrameLayout.createSequentialGroup()
-                        .addGroup(EditingRecipejFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel16)
-                            .addComponent(jLabel20)
-                            .addComponent(jLabel29, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(EditingRecipejFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jTextFieldEditRecipeNote, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jTextFieldEditRecipeTitle)
-                            .addComponent(jComboBoxEditRecipeCategory, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                    .addGroup(EditingRecipejFrameLayout.createSequentialGroup()
-                        .addGroup(EditingRecipejFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel18)
-                            .addComponent(jLabel17, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(EditingRecipejFrameLayout.createSequentialGroup()
+                                .addGap(1, 1, 1)
+                                .addComponent(jLabel17, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jLabel18, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(EditingRecipejFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane10, javax.swing.GroupLayout.DEFAULT_SIZE, 595, Short.MAX_VALUE)
                             .addGroup(EditingRecipejFrameLayout.createSequentialGroup()
                                 .addGroup(EditingRecipejFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(EditingRecipejFrameLayout.createSequentialGroup()
@@ -531,9 +529,19 @@ public class Receptar extends javax.swing.JFrame {
                                         .addComponent(jButtonCancelEditRecipe, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE))
                                     .addGroup(EditingRecipejFrameLayout.createSequentialGroup()
                                         .addGap(18, 18, 18)
-                                        .addComponent(jLabel19, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addGap(26, 26, 26)))))
-                .addGap(346, 346, 346))
+                                        .addComponent(jLabel19, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(jScrollPane10, javax.swing.GroupLayout.PREFERRED_SIZE, 587, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(EditingRecipejFrameLayout.createSequentialGroup()
+                        .addGroup(EditingRecipejFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel16)
+                            .addComponent(jLabel20)
+                            .addComponent(jLabel29, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(EditingRecipejFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jTextFieldEditRecipeNote, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jTextFieldEditRecipeTitle)
+                            .addComponent(jComboBoxEditRecipeCategory, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                .addContainerGap(353, Short.MAX_VALUE))
         );
         EditingRecipejFrameLayout.setVerticalGroup(
             EditingRecipejFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -566,7 +574,9 @@ public class Receptar extends javax.swing.JFrame {
                 .addGap(45, 45, 45))
         );
 
-        jButtonNoDeleteRecipe.setText("No");
+        DeleteRecipejDialog.setTitle(bundle.getString("DeleteRecipeDialogHeader")); // NOI18N
+
+        jButtonNoDeleteRecipe.setText(bundle.getString("NoLabel")); // NOI18N
         jButtonNoDeleteRecipe.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonNoDeleteRecipeActionPerformed(evt);
@@ -574,10 +584,10 @@ public class Receptar extends javax.swing.JFrame {
         });
 
         jLabel10.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel10.setText("Do you really want to delete this recipe?");
+        jLabel10.setText(bundle.getString("RecipeWarning") + ":"); // NOI18N
         jLabel10.setVerticalAlignment(javax.swing.SwingConstants.TOP);
 
-        jButtonYesDeleteRecipe.setText("Yes");
+        jButtonYesDeleteRecipe.setText(bundle.getString("YesLabel")); // NOI18N
         jButtonYesDeleteRecipe.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonYesDeleteRecipeActionPerformed(evt);
@@ -612,10 +622,10 @@ public class Receptar extends javax.swing.JFrame {
                 .addContainerGap(25, Short.MAX_VALUE))
         );
 
-        AddIngrediencejDialog.setTitle("Add ingredience");
+        AddIngrediencejDialog.setTitle(bundle.getString("AddIngredienceDialogHeader")); // NOI18N
 
         jLabel21.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        jLabel21.setText("Ingredience title:");
+        jLabel21.setText(bundle.getString("IngredienceTitleLabel") + ":"); // NOI18N
 
         jTextFieldIngredTitle.setHorizontalAlignment(javax.swing.JTextField.LEFT);
         jTextFieldIngredTitle.addActionListener(new java.awt.event.ActionListener() {
@@ -624,9 +634,9 @@ public class Receptar extends javax.swing.JFrame {
             }
         });
 
-        jLabel23.setText("Unit:");
+        jLabel23.setText(bundle.getString("IngredienceUnitLabel") + ":"); // NOI18N
 
-        jLabel25.setText("Amount:");
+        jLabel25.setText(bundle.getString("IngredienceAmountLabel") + ":"); // NOI18N
 
         jButtonCreateIngred.setText("OK");
         jButtonCreateIngred.addActionListener(new java.awt.event.ActionListener() {
@@ -635,7 +645,7 @@ public class Receptar extends javax.swing.JFrame {
             }
         });
 
-        jButtonCancelCreateIngred.setText("Cancel");
+        jButtonCancelCreateIngred.setText(bundle.getString("CancelLabel")); // NOI18N
         jButtonCancelCreateIngred.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonCancelCreateIngredActionPerformed(evt);
@@ -667,7 +677,7 @@ public class Receptar extends javax.swing.JFrame {
                     .addComponent(jTextFieldIngredTitle, javax.swing.GroupLayout.DEFAULT_SIZE, 102, Short.MAX_VALUE)
                     .addComponent(jTextFieldIngredUnit)
                     .addComponent(jSpinnerIngredAmount))
-                .addContainerGap(30, Short.MAX_VALUE))
+                .addContainerGap(35, Short.MAX_VALUE))
         );
         AddIngrediencejDialogLayout.setVerticalGroup(
             AddIngrediencejDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -691,10 +701,10 @@ public class Receptar extends javax.swing.JFrame {
                 .addGap(24, 24, 24))
         );
 
-        EditIngrediencejDialog.setTitle("Edit ingredience");
+        EditIngrediencejDialog.setTitle(bundle.getString("EditIngredienceDialogHeader")); // NOI18N
 
         jLabel22.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        jLabel22.setText("Ingredience title:");
+        jLabel22.setText(bundle.getString("IngredienceTitleLabel") + ":"); // NOI18N
 
         jTextFieldEditIngredTitle.setHorizontalAlignment(javax.swing.JTextField.LEFT);
         jTextFieldEditIngredTitle.addActionListener(new java.awt.event.ActionListener() {
@@ -703,9 +713,9 @@ public class Receptar extends javax.swing.JFrame {
             }
         });
 
-        jLabel24.setText("Unit:");
+        jLabel24.setText(bundle.getString("IngredienceUnitLabel") + ":"); // NOI18N
 
-        jLabel26.setText("Amount:");
+        jLabel26.setText(bundle.getString("IngredienceAmountLabel") + ":"); // NOI18N
 
         jButtonEditIngredienceButton.setText("OK");
         jButtonEditIngredienceButton.addActionListener(new java.awt.event.ActionListener() {
@@ -714,7 +724,7 @@ public class Receptar extends javax.swing.JFrame {
             }
         });
 
-        jButtonCancelEditIngredience.setText("Cancel");
+        jButtonCancelEditIngredience.setText(bundle.getString("CancelLabel")); // NOI18N
         jButtonCancelEditIngredience.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonCancelEditIngredienceActionPerformed(evt);
@@ -747,7 +757,7 @@ public class Receptar extends javax.swing.JFrame {
                         .addComponent(jTextFieldEditIngredTitle, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jTextFieldEditIngredUnit)
                     .addComponent(jSpinnerEditIngredAmount))
-                .addContainerGap(30, Short.MAX_VALUE))
+                .addContainerGap(35, Short.MAX_VALUE))
         );
         EditIngrediencejDialogLayout.setVerticalGroup(
             EditIngrediencejDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -771,7 +781,7 @@ public class Receptar extends javax.swing.JFrame {
                 .addGap(24, 24, 24))
         );
 
-        jButtonNoDeleteIngredience.setText("No");
+        jButtonNoDeleteIngredience.setText(bundle.getString("NoLabel")); // NOI18N
         jButtonNoDeleteIngredience.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonNoDeleteIngredienceActionPerformed(evt);
@@ -779,10 +789,10 @@ public class Receptar extends javax.swing.JFrame {
         });
 
         jLabel27.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel27.setText("Do you really want to delete this ingredience?");
+        jLabel27.setText(bundle.getString("IngredienceWarning")); // NOI18N
         jLabel27.setVerticalAlignment(javax.swing.SwingConstants.TOP);
 
-        jButtonYesDeleteIngredience.setText("Yes");
+        jButtonYesDeleteIngredience.setText(bundle.getString("YesLabel")); // NOI18N
         jButtonYesDeleteIngredience.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonYesDeleteIngredienceActionPerformed(evt);
@@ -826,7 +836,9 @@ public class Receptar extends javax.swing.JFrame {
             }
         });
 
-        jButtonEditCategory.setText("Edit");
+        jPanel2.setAutoscrolls(true);
+
+        jButtonEditCategory.setText(bundle.getString("EditLabel")); // NOI18N
         jButtonEditCategory.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonEditCategoryActionPerformed(evt);
@@ -844,14 +856,15 @@ public class Receptar extends javax.swing.JFrame {
         });
         jScrollPane2.setViewportView(jListCategories);
 
-        jButtonDeleteCategory.setText("Delete");
+        jButtonDeleteCategory.setText(bundle.getString("DeleteLabel")); // NOI18N
         jButtonDeleteCategory.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonDeleteCategoryActionPerformed(evt);
             }
         });
 
-        jButtonAddCategory.setText("Add new");
+        jButtonAddCategory.setText(bundle.getString("AddLabel")); // NOI18N
+        jButtonAddCategory.setActionCommand(bundle.getString("AddLabel")); // NOI18N
         jButtonAddCategory.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonAddCategoryActionPerformed(evt);
@@ -885,7 +898,7 @@ public class Receptar extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jTabbedCategoriesPane.addTab("Categories", jPanel2);
+        jTabbedCategoriesPane.addTab(bundle.getString("CategoriesLabel"), jPanel2); // NOI18N
 
         jScrollPane5.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 
@@ -906,9 +919,9 @@ public class Receptar extends javax.swing.JFrame {
         jTextAreaShowRecipeInstructions.setRows(5);
         jScrollPane6.setViewportView(jTextAreaShowRecipeInstructions);
 
-        jLabel3.setText("Instructions");
+        jLabel3.setText(bundle.getString("RecipeInstructionsLabel")); // NOI18N
 
-        jLabel4.setText("Ingrediences");
+        jLabel4.setText(bundle.getString("IngrediencesLabel")); // NOI18N
 
         jTableIngrediences.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -933,25 +946,25 @@ public class Receptar extends javax.swing.JFrame {
 
         jLabelRecipeTitle.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
 
-        jLabel5.setText("Time:");
+        jLabel5.setText(bundle.getString("RecipeTimeLabel") + ":"); // NOI18N
 
-        jLabel6.setText("Note:");
+        jLabel6.setText(bundle.getString("RecipeNoteLabel") + ":"); // NOI18N
 
-        jButtonEditIngredience.setText("Edit");
+        jButtonEditIngredience.setText(bundle.getString("EditLabel")); // NOI18N
         jButtonEditIngredience.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonEditIngredienceActionPerformed(evt);
             }
         });
 
-        jButtonDeleteIngredience.setText("Delete");
+        jButtonDeleteIngredience.setText(bundle.getString("DeleteLabel")); // NOI18N
         jButtonDeleteIngredience.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonDeleteIngredienceActionPerformed(evt);
             }
         });
 
-        jButtonAddIngredience.setText("Add");
+        jButtonAddIngredience.setText(bundle.getString("AddLabel")); // NOI18N
         jButtonAddIngredience.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jButtonAddIngredienceMouseClicked(evt);
@@ -976,7 +989,6 @@ public class Receptar extends javax.swing.JFrame {
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel3)
                             .addComponent(jLabel4)
                             .addGroup(jPanel4Layout.createSequentialGroup()
                                 .addComponent(jLabel6)
@@ -987,7 +999,8 @@ public class Receptar extends javax.swing.JFrame {
                                 .addGap(18, 18, 18)
                                 .addComponent(jButtonEditIngredience)
                                 .addGap(18, 18, 18)
-                                .addComponent(jButtonDeleteIngredience)))
+                                .addComponent(jButtonDeleteIngredience))
+                            .addComponent(jLabel3))
                         .addGap(0, 599, Short.MAX_VALUE))
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addComponent(jLabelRecipeTitle, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1021,9 +1034,9 @@ public class Receptar extends javax.swing.JFrame {
                     .addComponent(jButtonEditIngredience)
                     .addComponent(jButtonDeleteIngredience)
                     .addComponent(jButtonAddIngredience))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel3)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane6, javax.swing.GroupLayout.DEFAULT_SIZE, 136, Short.MAX_VALUE)
                 .addGap(50, 50, 50))
         );
@@ -1040,26 +1053,26 @@ public class Receptar extends javax.swing.JFrame {
         jScrollPane8.setViewportView(jListCategoriesSecond);
 
         jLabel7.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jLabel7.setText("Categories");
+        jLabel7.setText(bundle.getString("CategoriesLabel")); // NOI18N
 
         jLabel8.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jLabel8.setText("Recipes");
+        jLabel8.setText(bundle.getString("RecipesLabel")); // NOI18N
 
-        jButtonAddRecipe.setText("Add");
+        jButtonAddRecipe.setText(bundle.getString("AddLabel")); // NOI18N
         jButtonAddRecipe.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonAddRecipeActionPerformed(evt);
             }
         });
 
-        jButtonDeleteRecipe.setText("Delete");
+        jButtonDeleteRecipe.setText(bundle.getString("DeleteLabel")); // NOI18N
         jButtonDeleteRecipe.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonDeleteRecipeActionPerformed(evt);
             }
         });
 
-        jButtonEditRecipe.setText("Edit");
+        jButtonEditRecipe.setText(bundle.getString("EditLabel")); // NOI18N
         jButtonEditRecipe.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonEditRecipeActionPerformed(evt);
@@ -1107,7 +1120,7 @@ public class Receptar extends javax.swing.JFrame {
             .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
         );
 
-        jTabbedCategoriesPane.addTab("Recipes", jPanel3);
+        jTabbedCategoriesPane.addTab(bundle.getString("RecipesLabel"), jPanel3); // NOI18N
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
