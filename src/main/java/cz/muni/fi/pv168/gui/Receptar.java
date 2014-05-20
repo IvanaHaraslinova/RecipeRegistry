@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Properties;
+import java.util.ResourceBundle;
 import java.util.logging.Level;
 import javax.sql.DataSource;
 import javax.swing.ComboBoxModel;
@@ -923,22 +924,7 @@ public class Receptar extends javax.swing.JFrame {
 
         jLabel4.setText(bundle.getString("IngrediencesLabel")); // NOI18N
 
-        jTableIngrediences.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-
-            },
-            new String [] {
-                "Title", "Amount", "Unit"
-            }
-        ) {
-            Class[] types = new Class [] {
-                java.lang.String.class, java.lang.Double.class, java.lang.String.class
-            };
-
-            public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
-            }
-        });
+        jTableIngrediences.setModel(new IngredienceTableModel());
         jTableIngrediences.setMaximumSize(new java.awt.Dimension(2147483647, 2147483647));
         jTableIngrediences.setMinimumSize(new java.awt.Dimension(100, 160));
         jTableIngrediences.setName(""); // NOI18N
@@ -1006,9 +992,9 @@ public class Receptar extends javax.swing.JFrame {
                         .addComponent(jLabelRecipeTitle, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jLabel5)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jLabelRecipeTime, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabelRecipeTime, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(12, 12, 12)
                         .addComponent(jLabel2)
                         .addGap(30, 30, 30))))
         );
@@ -1020,7 +1006,7 @@ public class Receptar extends javax.swing.JFrame {
                     .addComponent(jLabelRecipeTitle, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel5)
                     .addComponent(jLabel2)
-                    .addComponent(jLabelRecipeTime, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jLabelRecipeTime, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabelRecipeNote, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1877,11 +1863,11 @@ public class Receptar extends javax.swing.JFrame {
         public String getColumnName(int columnIndex) {
             switch (columnIndex) {
                 case 0:
-                    return "Title";
+                    return ResourceBundle.getBundle("guilabels", Locale.getDefault()).getString("IngredienceTitleLabel");
                 case 1:
-                    return "Amount";
+                    return ResourceBundle.getBundle("guilabels", Locale.getDefault()).getString("IngredienceAmountLabel");
                 case 2:
-                    return "Unit";
+                    return ResourceBundle.getBundle("guilabels", Locale.getDefault()).getString("IngredienceUnitLabel");
                 default:
                     throw new IllegalArgumentException("columnIndex");
             }
