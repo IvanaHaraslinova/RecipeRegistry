@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <contextName>Recipe</contextName>
+
+    <!-- tu tu cast s tomcatom sme vynechali, lebo tomcat nemame -->
+            <appender name="APP" class="ch.qos.logback.core.rolling.RollingFileAppender">
+                <!-- context name da - ten muj projekt, da sa posielat aj mailom ten log -->
+                <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+                    <fileNamePattern>${user.home}/${CONTEXT_NAME}.%d{yyyy-MM-dd}.log</fileNamePattern>
+                    <maxHistory>30</maxHistory>
+                </rollingPolicy>
+                <encoder>
+                    <pattern>%d [%thread] %-5level %logger{12} - %msg%n</pattern>
+                </encoder>
+            </appender>
+    <root level="all">
+        <appender-ref ref="APP"/>
+    </root>
+
+</configuration>
