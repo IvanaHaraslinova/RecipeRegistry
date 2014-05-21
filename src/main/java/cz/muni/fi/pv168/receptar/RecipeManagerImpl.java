@@ -35,7 +35,7 @@ public class RecipeManagerImpl implements RecipeManager {
 
     @Override
     public Recipe createRecipe(Recipe recipe) throws RecipeException {
-        log.debug("createRecipe()");
+        log.debug("createRecipe() {}", recipe);
         if (recipe == null) {
             throw new NullPointerException("Recipe in method createRecipe is null");
         }

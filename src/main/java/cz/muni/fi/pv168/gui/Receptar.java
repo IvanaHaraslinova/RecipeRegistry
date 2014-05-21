@@ -13,6 +13,7 @@ import cz.muni.fi.pv168.receptar.RecipeCategory;
 import cz.muni.fi.pv168.receptar.RecipeCategoryManagerImpl;
 import cz.muni.fi.pv168.receptar.RecipeException;
 import cz.muni.fi.pv168.receptar.RecipeManagerImpl;
+import java.awt.Component;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -24,7 +25,11 @@ import java.util.logging.Level;
 import javax.sql.DataSource;
 import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.DefaultListCellRenderer;
 import javax.swing.DefaultListModel;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.ListCellRenderer;
 import javax.swing.SwingWorker;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableModel;
@@ -1002,11 +1007,12 @@ public class Receptar extends javax.swing.JFrame {
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabelRecipeTitle, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel5)
-                    .addComponent(jLabel2)
-                    .addComponent(jLabelRecipeTime, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabelRecipeTime, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabelRecipeTitle, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel5)
+                        .addComponent(jLabel2)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabelRecipeNote, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1690,7 +1696,18 @@ public class Receptar extends javax.swing.JFrame {
     private class LoadRecipes extends SwingWorker<Void, Void> {
 
         private DefaultListModel model = new DefaultListModel();
-
+        private RecipeCellRenderer renderer = new RecipeCellRenderer();
+        
+        
+        private class RecipeCellRenderer extends DefaultListCellRenderer{
+            @Override
+            public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+                super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+                setText(((Recipe)value).getTitle());
+                return this;
+            }
+        }
+        
         @Override
         protected Void doInBackground() throws Exception {
 
@@ -1714,6 +1731,7 @@ public class Receptar extends javax.swing.JFrame {
 
         @Override
         protected void done() {
+            jListRecipes.setCellRenderer(renderer);
             jListRecipes.setModel(model);
 
         }
